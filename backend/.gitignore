@@ -1,12 +1,23 @@
+# Dependencies
 node_modules/
-dist/
 
+# Build
+dist/
+build/
+
+# Environment
 .env
 .env.local
 .env.*.local
 
+# Logs
 *.log
 npm-debug.log*
 
+# OS
 .DS_Store
 Thumbs.db
+
+# Editor
+.vscode/
+/src/generated/prisma

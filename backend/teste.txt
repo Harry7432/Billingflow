@@ -1,0 +1,1 @@
+postgres://billigflow_user:avdQ6fITQCTj4P8zGNdEjbJDsYokoZJVOlQ2fSkxs5zOjIkJoKSbkvoSikkODbyb@187.77.44.253:5435/billigflow_db
