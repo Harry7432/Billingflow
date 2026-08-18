@@ -1,10 +1,13 @@
 import Fastify from "fastify";
+import { prisma } from "./database/prisma.js";
 
 const app = Fastify({
   logger: true,
 });
 
 app.get("/health", async () => {
+  await prisma.company.findFirst();
+
   return {
     status: "ok",
     service: "billingflow-api",
