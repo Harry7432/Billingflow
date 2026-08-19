@@ -13,6 +13,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model Company {
   id        String   @id @default(uuid())
   name      String
@@ -21,8 +22,11 @@ model Company {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  users UserCompany[]
+
   @@map("companies")
 }
+
 model User {
   id           String   @id @default(uuid())
   name         String
@@ -32,5 +36,22 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  companies UserCompany[]
+
   @@map("users")
+}
+
+model UserCompany {
+  id        String   @id @default(uuid())
+  userId    String
+  companyId String
+  role      String   @default("MEMBER")
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@index([companyId])
+  @@map("user_companies")
 }
