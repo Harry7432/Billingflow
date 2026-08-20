@@ -1,6 +1,10 @@
 import { prisma } from "../../database/prisma.js";
 import { Prisma } from "../../generated/prisma/client.js";
-import { encrypt } from "../../services/encryption.service.js";
+import {
+  decrypt,
+  encrypt,
+} from "../../services/encryption.service.js";
+import { findCompanyIntegration } from "./company-integration.repository.js";
 
 type CreateCompanyIntegrationInput = {
   companyId: string;
@@ -8,6 +12,12 @@ type CreateCompanyIntegrationInput = {
   name: string;
   credentials: Record<string, unknown>;
   configJson?: Record<string, unknown>;
+};
+
+type GetCompanyIntegrationInput = {
+  companyId: string;
+  provider: string;
+  name: string;
 };
 
 export async function createCompanyIntegration({
@@ -66,4 +76,40 @@ export async function createCompanyIntegration({
   });
 
   return integration;
+}
+
+export async function getCompanyIntegration({
+  companyId,
+  provider,
+  name,
+}: GetCompanyIntegrationInput) {
+  const integration = await findCompanyIntegration({
+    companyId,
+    provider,
+    name,
+  });
+
+  if (!integration) {
+    throw new Error("Integração não encontrada.");
+  }
+
+  if (!integration.active) {
+    throw new Error("Integração inativa.");
+  }
+
+  const credentials = JSON.parse(
+    decrypt(integration.credentialsEncrypted),
+  ) as Record<string, unknown>;
+
+  return {
+    id: integration.id,
+    companyId: integration.companyId,
+    provider: integration.provider,
+    name: integration.name,
+    active: integration.active,
+    credentials,
+    configJson: integration.configJson,
+    createdAt: integration.createdAt,
+    updatedAt: integration.updatedAt,
+  };
 }
