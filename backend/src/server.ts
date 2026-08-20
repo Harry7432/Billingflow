@@ -1,3 +1,4 @@
+import { companyAccessRoutes } from "./modules/auth/company-access.routes.js";
 import { userCompanyRoutes } from "./modules/auth/user-company.routes.js";
 import { meRoutes } from "./modules/auth/me.routes.js";
 import fastifyJwt from "@fastify/jwt";
@@ -35,6 +36,9 @@ app.register(meRoutes, {
   prefix: "/auth",
 });
 app.register(userCompanyRoutes, {
+  prefix: "/auth",
+});
+app.register(companyAccessRoutes, {
   prefix: "/auth",
 });
 
