@@ -1,3 +1,4 @@
+import { companyIntegrationRoutes } from "./modules/integrations/company-integration.routes.js";
 import { companyAccessRoutes } from "./modules/auth/company-access.routes.js";
 import { userCompanyRoutes } from "./modules/auth/user-company.routes.js";
 import { meRoutes } from "./modules/auth/me.routes.js";
@@ -32,15 +33,20 @@ app.register(authRoutes, {
 app.register(loginRoutes, {
   prefix: "/auth",
 });
+
 app.register(meRoutes, {
   prefix: "/auth",
 });
+
 app.register(userCompanyRoutes, {
   prefix: "/auth",
 });
+
 app.register(companyAccessRoutes, {
   prefix: "/auth",
 });
+
+app.register(companyIntegrationRoutes);
 
 const start = async () => {
   try {

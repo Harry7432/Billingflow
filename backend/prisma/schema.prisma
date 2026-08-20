@@ -22,7 +22,8 @@ model Company {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users UserCompany[]
+  users        UserCompany[]
+  integrations CompanyIntegration[]
 
   @@map("companies")
 }
@@ -54,4 +55,24 @@ model UserCompany {
   @@unique([userId, companyId])
   @@index([companyId])
   @@map("user_companies")
+}
+
+model CompanyIntegration {
+  id        String   @id @default(uuid())
+  companyId String
+  provider  String
+  name      String
+  active    Boolean  @default(true)
+
+  credentialsEncrypted String
+  configJson           Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, provider, name])
+  @@index([companyId])
+  @@map("company_integrations")
 }
